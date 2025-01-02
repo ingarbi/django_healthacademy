@@ -1,6 +1,5 @@
 from django.db import models
 
-from base.models import Appointment
 from userauths.models import User
 
 NOTIFICATION_CHOICES = (
@@ -29,11 +28,11 @@ class Notification(models.Model):
         Patient, on_delete=models.SET_NULL, null=True, blank=True
     )
     appointment = models.ForeignKey(
-        Appointment,
+        "base.Appointment",
         on_delete=models.CASCADE,
         null=True,
         blank=True,
-        related_name="doctor_appointment_notification",
+        related_name="patient_appointment_notification",
     )
     category = models.CharField(
         max_length=100,

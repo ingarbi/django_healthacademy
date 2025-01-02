@@ -1,6 +1,5 @@
 from django.db import models
 
-from base.models import Appointment
 from userauths.models import User
 
 NOTIFICATION_CHOICES = (
@@ -28,7 +27,7 @@ class Doctor(models.Model):
 class Notification(models.Model):
     doctor = models.ForeignKey(Doctor, on_delete=models.SET_NULL, null=True, blank=True)
     appointment = models.ForeignKey(
-        Appointment,
+        "base.Appointment",
         on_delete=models.CASCADE,
         null=True,
         blank=True,
