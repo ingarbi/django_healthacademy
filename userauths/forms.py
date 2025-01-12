@@ -3,6 +3,11 @@ from django.contrib.auth.forms import UserCreationForm
 
 from .models import User
 
+USER_TYPE = (
+    ("Doctor", "Доктор"),
+    ("Patient", "Пациент"),
+)
+
 
 class UserRegisterForm(UserCreationForm):
     full_name = forms.CharField(
@@ -24,6 +29,10 @@ class UserRegisterForm(UserCreationForm):
         widget=forms.PasswordInput(
             attrs={"class": "form-control", "placeholder": "******"}
         )
+    )
+
+    user_type = forms.ChoiceField(
+        choices=USER_TYPE, widget=forms.Select(attrs={"class": "form-select"})
     )
 
     class Meta:

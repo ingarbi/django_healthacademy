@@ -48,7 +48,9 @@ def login_view(request):
             password = form.cleaned_data.get("password")
             try:
                 user_instance = User.objects.get(email=email, is_active=True)
-                user_authenticate = authenticate(email, password)
+                user_authenticate = authenticate(
+                    request, email=email, password=password
+                )
 
                 if user_instance is not None:
                     login(request, user_authenticate)
@@ -63,6 +65,7 @@ def login_view(request):
         form = UserLoginForm()
     context = {"form": form}
     return render(request, "userauths/sign-in.html", context)
+
 
 def logout_view(request):
     logout(request)
