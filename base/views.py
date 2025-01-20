@@ -57,7 +57,14 @@ def book_appointment(request, service_id, doctor_id):
         billing.tax = appointment.service.cost * 13 / 100
         billing.total = billing.sub_total + billing.tax
         billing.status = "Не оплачено"
+        billing.save()
 
         return redirect("base:checkout", billing.billing_id)
     context = {"service": service, "doctor": doctor, "patient": patient}
     return render(request, "base/book_appointment.html", context)
+
+
+def checkout_view(request, billing_id):
+    billing = Billing.objects.get(billing_id=billing_id)
+    context = {"billing": billing}
+    return render(request, "base/checkout.html", context)

@@ -12,4 +12,5 @@ urlpatterns = [
         views.book_appointment,
         name="book_appointment",
     ),
+    path("checkout/<billing_id>", views.checkout_view, name="checkout"),
 ]
