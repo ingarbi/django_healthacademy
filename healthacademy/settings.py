@@ -1,6 +1,10 @@
 from pathlib import Path
 
 from django.contrib.messages import constants as messages
+from environs import Env
+
+env = Env()
+env.read_env()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -208,3 +212,6 @@ JAZZMIN_UI_TWEAKS = {
 }
 
 AUTH_USER_MODEL = 'userauths.User'
+
+STRIPE_PUBLIC_KEY = env('STRIPE_PUBLIC_KEY')
+STRIPE_SECRET_KEY = env('STRIPE_SECRET_KEY')
