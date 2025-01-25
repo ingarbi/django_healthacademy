@@ -1,0 +1,23 @@
+{% extends "main/base.html" %} {% block content %}<section class="container">
+    <div class="container">
+        <br>
+        {% if payment_status == 'paid' %}
+          
+        
+        <div class="d-flex justify-content-center flex-column align-items-center mb-5">
+            <i class="fas fa-check-circle text-success display-1"></i>
+            <h1>Запись на прием успешно запланирована</h1>
+            <p class="text-success">Спасибо за запись на прием <i class="fas fa-check-circle"></i></p>
+            <a href="patient/dashboard.html" class="btn btn-success d-flex align-items-center">Моя панель <i class="bi bi-grid-fill ms-2"></i></a>
+        </div>
+        {% elif payment_status == 'failed' %}
+       
+        <div class="d-flex justify-content-center flex-column align-items-center mb-5">
+            <i class="fas fa-exclamation-triangle fa-flip text-danger display-1"></i>
+            <h1>Запись на прием не удалась</h1>
+            <p>Мы не смогли обработать ваш платеж, пожалуйста, попробуйте позже. Спасибо за понимание</p>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock content %}

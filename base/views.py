@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
+from django.views.decorators.csrf import csrf_exempt
 
 from base.models import Appointment, Billing, Service
 from patient.models import Notification as PatientNotification
@@ -77,7 +78,7 @@ def checkout_view(request, billing_id):
     return render(request, "base/checkout.html", context)
 
 
-@login_required
+@csrf_exempt
 def stripe_payment(request, billing_id):
     billing = Billing.objects.get(billing_id=billing_id)
     stripe.api_key = settings.STRIPE_SECRET_KEY
@@ -91,7 +92,7 @@ def stripe_payment(request, billing_id):
                     "product_data": {
                         "name": "Оплата" + billing.patient.full_name,
                     },
-                    "unit_amount": int(billing.total * 1000),
+                    "unit_amount": int(billing.total * 100),
                 },
                 "quantity": 1,
             },
@@ -118,6 +119,8 @@ def stripe_payment_verify(request, billing_id):
         if billing.status == "Не оплачено":
             billing.status = "Оплачено"
             billing.save()
+            billing.appointment.status = "Выполнено"
+            billing.appointment.save()
 
             Notification.objects.create(
                 doctor=billing.appointment.doctor,
