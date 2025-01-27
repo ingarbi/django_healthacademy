@@ -1,0 +1,104 @@
+{% extends "main/base.html" %}
+{% block content %}
+<section class="pt-5 pb-5">
+    <div class="container">
+        <div class="row mt-0 mt-md-4">
+            {% include "physician/sidebar.html" %}
+            <div class="col-lg-9 col-md-8 col-12">
+                <h4 class="mb-0 mb-4 fw-bold">Детали приема #{{ appointment.appointment_id }}</h4>
+                <div class="card mb-4">
+                    <div class="shadow border p-3 mb-4 rounded-4">
+                        <p>
+                            <a>
+                                <p><span class="fw-semibold text-dark">ID приема:</span> {{ appointment.appointment_id }}</p>
+                        <p><span class="fw-semibold text-dark">Услуга:</span> {{ appointment.service.name }}</p>
+                        <p><span class="fw-semibold text-dark">Пациент:</span> {{appointment.patient.full_name}}</p>
+                        <p><span class="fw-semibold text-dark">Проблема:</span> {{appointment.issues}}</p>
+                        <p><span class="fw-semibold text-dark">Симптомы:</span> {{appointment.symptoms}}</p>
+                        <p><span class="fw-semibold text-dark">Статус:</span> {{appointment.status}}</p>
+                        <p><span class="fw-semibold text-dark">Дата:</span> {{appointment.appointment_date}}</p>
+                                <p>
+                                    <span class="fw-semibold text-dark">Действие:</span>
+                                    <a href="#" class="btn btn-outline-danger btn-sm">Отменить прием <i class="fas fa-trash ms-2"></i></a>
+                                    <a href="#" class="btn btn-outline-success btn-sm">Завершить прием <i class="fas fa-check-circle ms-2"></i></a>
+                                </p>
+                            </a>
+                        </p>
+                    </div>
+                </div>
+
+                <div id="medical-report">
+                    <div class="d-flex justify-content-between">
+                        <h4 class="mb-0 mb-4 fw-bold">Медицинские отчеты</h4>
+                        <button class="btn btn-primary btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#collapseMedicalReport" aria-expanded="false" aria-controls="collapseMedicalReport">Добавить отчет <i class="fas fa-plus ms-2"></i></button>
+                    </div>
+                    <div class="collapse" id="collapseMedicalReport">
+                        <div class="border p-3 mb-4 rounded-4">
+                            <form action="#" method="POST">
+                                <input type="text" class="form-control mb-3" name="diagnosis" placeholder="Диагноз" />
+                                <input type="text" class="form-control mb-3" name="treatment" placeholder="Лечение" />
+                                <button class="btn btn-secondary btn-sm">Сохранить <i class="fas fa-save ms-2"></i></button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="card mb-4">
+                        <div class="border p-3 mb-4 rounded-4">
+                            <div class="shadow p-3 rounded-4 mb-3">
+                                <p><span class="fw-semibold text-dark">Диагноз:</span> Мигрень</p>
+                                <p><span class="fw-semibold text-dark">Лечение:</span> Обезболивающее</p>
+                                <button class="btn btn-dark btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#collapseMedicalRecord1" aria-expanded="false" aria-controls="collapseMedicalRecord1">Редактировать <i class="fas fa-edit ms-2"></i></button>
+                                <div class="collapse mt-3" id="collapseMedicalRecord1">
+                                    <div class="border p-3 rounded-4">
+                                        <form action="#" method="POST">
+                                            <input type="text" class="form-control mb-3" value="Мигрень" name="diagnosis" placeholder="Диагноз" />
+                                            <input type="text" class="form-control mb-3" value="Обезболивающее" name="treatment" placeholder="Лечение" />
+                                            <button class="btn btn-secondary btn-sm">Сохранить изменения <i class="fas fa-save ms-2"></i></button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <p>Нет медицинских отчетов</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <h4 class="mb-0 mb-4 fw-bold">Лабораторные анализы</h4>
+                    <button class="btn btn-primary btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#collapseLabTest" aria-expanded="false" aria-controls="collapseLabTest">Добавить анализы <i class="fas fa-plus ms-2"></i></button>
+                </div>
+                <div class="collapse" id="collapseLabTest">
+                    <div class="border p-3 mb-4 rounded-4">
+                        <form action="#" method="POST">
+                            <input type="text" class="form-control mb-3" name="test_name" placeholder="Название анализа" />
+                            <input type="text" class="form-control mb-3" name="description" placeholder="Описание" />
+                            <button class="btn btn-secondary btn-sm">Сохранить <i class="fas fa-save ms-2"></i></button>
+                        </form>
+                    </div>
+                </div>
+                <div class="card mb-4">
+                    <div class="border p-3 mb-4 rounded-4">
+                        <div class="shadow p-3 rounded-4 mb-3">
+                            <p><span class="fw-semibold text-dark">Название анализа:</span> Кровь</p>
+                            <p><span class="fw-semibold text-dark">Описание:</span> Полный анализ крови</p>
+                            <p><span class="fw-semibold text-dark">Результат:</span> Незаполнено</p>
+                            <button class="btn btn-dark btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#collapseLabTest1" aria-expanded="false" aria-controls="collapseLabTest1">Редактировать <i class="fas fa-edit ms-2"></i></button>
+                            <div class="collapse mt-3" id="collapseLabTest1">
+                                <div class="border p-3 rounded-4">
+                                    <form action="#" method="POST">
+                                        <input type="text" class="form-control mb-3" value="Кровь" name="test_name" placeholder="Название анализа" />
+                                        <input type="text" class="form-control mb-3" value="Полный анализ крови" name="description" placeholder="Описание" />
+                                        <button class="btn btn-secondary btn-sm">Сохранить изменения <i class="fas fa-save ms-2"></i></button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <p>Нет лабораторных анализов</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock content %}
