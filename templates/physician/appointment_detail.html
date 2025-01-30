@@ -19,8 +19,14 @@
                         <p><span class="fw-semibold text-dark">Дата:</span> {{appointment.appointment_date}}</p>
                                 <p>
                                     <span class="fw-semibold text-dark">Действие:</span>
-                                    <a href="#" class="btn btn-outline-danger btn-sm">Отменить прием <i class="fas fa-trash ms-2"></i></a>
-                                    <a href="#" class="btn btn-outline-success btn-sm">Завершить прием <i class="fas fa-check-circle ms-2"></i></a>
+                                    {% if appointment.status == "Запланировано" %}
+                                    <a href="{% url 'physician:cancel_appointment' appointment.appointment_id %}" class="btn btn-outline-danger btn-sm">Отменить прием <i class="fas fa-trash ms-2"></i></a>
+                                    <a href="{% url 'physician:complete_appointment' appointment.appointment_id %}" class="btn btn-outline-success btn-sm">Завершить прием <i class="fas fa-check-circle ms-2"></i></a>
+                                    {% elif appointment.status == "Отменено" %}
+                                    <a href="{% url 'physician:activate_appointment' appointment.appointment_id %}" class="btn btn-success btn-sm">Активировать прием <i class="fas fa-check-circle ms-2"></i></a>
+                                    {% elif appointment.status == "Отменено" %}
+                                    <a href="#" class="btn btn-success btn-sm">Прием выполнен <i class="fas fa-check-circle ms-2"></i></a>
+                                    {% endif %}
                                 </p>
                             </a>
                         </p>
