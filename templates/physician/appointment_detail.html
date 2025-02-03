@@ -40,31 +40,38 @@
                     </div>
                     <div class="collapse" id="collapseMedicalReport">
                         <div class="border p-3 mb-4 rounded-4">
-                            <form action="#" method="POST">
+                            <form action="{% url 'physician:add_medical_record' appointment.appointment_id %}" method="POST">
+                                {% csrf_token %}
                                 <input type="text" class="form-control mb-3" name="diagnosis" placeholder="Диагноз" />
                                 <input type="text" class="form-control mb-3" name="treatment" placeholder="Лечение" />
-                                <button class="btn btn-secondary btn-sm">Сохранить <i class="fas fa-save ms-2"></i></button>
+                                <button type="submit" class="btn btn-secondary btn-sm">Сохранить <i class="fas fa-save ms-2"></i></button>
                             </form>
                         </div>
                     </div>
 
                     <div class="card mb-4">
                         <div class="border p-3 mb-4 rounded-4">
+                            {% for record in medical_record  %}
+                              
+                            
                             <div class="shadow p-3 rounded-4 mb-3">
-                                <p><span class="fw-semibold text-dark">Диагноз:</span> Мигрень</p>
-                                <p><span class="fw-semibold text-dark">Лечение:</span> Обезболивающее</p>
-                                <button class="btn btn-dark btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#collapseMedicalRecord1" aria-expanded="false" aria-controls="collapseMedicalRecord1">Редактировать <i class="fas fa-edit ms-2"></i></button>
-                                <div class="collapse mt-3" id="collapseMedicalRecord1">
+                                <p><span class="fw-semibold text-dark">Диагноз: </span>{{ record.diagnosis}}</p>
+                                <p><span class="fw-semibold text-dark">Лечение: </span> {{record.treatment}}</p>
+                                <button class="btn btn-dark btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#collapseMedicalRecord{{ record.id}}" aria-expanded="false" aria-controls="collapseMedicalRecord{{ record.id}}">Редактировать <i class="fas fa-edit ms-2"></i></button>
+                                <div class="collapse mt-3" id="collapseMedicalRecord{{ record.id}}">
                                     <div class="border p-3 rounded-4">
-                                        <form action="#" method="POST">
-                                            <input type="text" class="form-control mb-3" value="Мигрень" name="diagnosis" placeholder="Диагноз" />
-                                            <input type="text" class="form-control mb-3" value="Обезболивающее" name="treatment" placeholder="Лечение" />
+                                        <form action="{% url 'physician:edit_medical_record' appointment.appointment_id record.id %}" method="POST">
+                                            {% csrf_token %}
+                                            <input type="text" class="form-control mb-3" value="{{ record.diagnosis}}" name="diagnosis" placeholder="Диагноз" />
+                                            <input type="text" class="form-control mb-3" value="{{ record.treatment}}" name="treatment" placeholder="Лечение" />
                                             <button class="btn btn-secondary btn-sm">Сохранить изменения <i class="fas fa-save ms-2"></i></button>
                                         </form>
                                     </div>
                                 </div>
                             </div>
+                            {% empty %}
                             <p>Нет медицинских отчетов</p>
+                            {% endfor %}
                         </div>
                     </div>
                 </div>

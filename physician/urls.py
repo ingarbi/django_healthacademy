@@ -27,4 +27,14 @@ urlpatterns = [
         views.complete_appointment,
         name="complete_appointment",
     ),
+    path(
+        "add-medical-record/<appointment_id>/",
+        views.add_medical_record,
+        name="add_medical_record",
+    ),
+    path(
+        "edit_medical_record/<appointment_id>/<medical_record_id>/",
+        views.edit_medical_record,
+        name="edit_medical_record",
+    ),
 ]

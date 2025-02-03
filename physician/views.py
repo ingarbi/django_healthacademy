@@ -57,6 +57,7 @@ def cancel_appointment(request, appointment_id):
 
     return redirect("physician:appointment_detail", appointment.appointment_id)
 
+
 @login_required
 def complete_appointment(request, appointment_id):
     doctor = physician_models.Doctor.objects.get(user=request.user)
@@ -69,6 +70,7 @@ def complete_appointment(request, appointment_id):
 
     return redirect("physician:appointment_detail", appointment.appointment_id)
 
+
 @login_required
 def activate_appointment(request, appointment_id):
     doctor = physician_models.Doctor.objects.get(user=request.user)
@@ -80,3 +82,37 @@ def activate_appointment(request, appointment_id):
     messages.success(request, "Прием успешно активирован")
 
     return redirect("physician:appointment_detail", appointment.appointment_id)
+
+
+@login_required
+def add_medical_record(request, appointment_id):
+    doctor = physician_models.Doctor.objects.get(user=request.user)
+    appointment = base_models.Appointment.objects.get(
+        appointment_id=appointment_id, doctor=doctor
+    )
+    if request.method == "POST":
+        diagnosis = request.POST.get("diagnosis")
+        treatment = request.POST.get("treatment")
+        base_models.MedicalRecord.objects.create(
+            appointment=appointment, diagnosis=diagnosis, treatment=treatment
+        )
+        messages.success(request, "Медицинская запись успешно добавлена")
+        return redirect("physician:appointment_detail", appointment.appointment_id)
+    
+@login_required
+def edit_medical_record(request, appointment_id, medical_record_id):
+    doctor = physician_models.Doctor.objects.get(user=request.user)
+    appointment = base_models.Appointment.objects.get(
+        appointment_id=appointment_id, doctor=doctor
+    )
+    medical_record = base_models.MedicalRecord.objects.get(
+        id=medical_record_id, appointment=appointment
+    )
+    if request.method == "POST":
+        diagnosis = request.POST.get("diagnosis")
+        treatment = request.POST.get("treatment")
+        medical_record.diagnosis = diagnosis
+        medical_record.treatment = treatment
+        medical_record.save()
+        messages.success(request, "Медицинская запись успешно обновлена")
+        return redirect("physician:appointment_detail", appointment.appointment_id)
