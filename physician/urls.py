@@ -37,4 +37,14 @@ urlpatterns = [
         views.edit_medical_record,
         name="edit_medical_record",
     ),
+    path(
+        "add-lab-test/<appointment_id>/",
+        views.add_lab_test,
+        name="add_lab_test",
+    ),
+    path(
+        "edit-lab-test/<appointment_id>/<lab_test_id>/",
+        views.edit_lab_test,
+        name="edit_lab_test",
+    ),
 ]

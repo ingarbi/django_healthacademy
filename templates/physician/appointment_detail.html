@@ -82,31 +82,39 @@
                 </div>
                 <div class="collapse" id="collapseLabTest">
                     <div class="border p-3 mb-4 rounded-4">
-                        <form action="#" method="POST">
+                        <form action="{% url 'physician:add_lab_test' appointment.appointment_id %}" method="POST">
+                            {% csrf_token %}
                             <input type="text" class="form-control mb-3" name="test_name" placeholder="Название анализа" />
                             <input type="text" class="form-control mb-3" name="description" placeholder="Описание" />
-                            <button class="btn btn-secondary btn-sm">Сохранить <i class="fas fa-save ms-2"></i></button>
+                            <textarea name="result" class="form-control mb-3" placeholder="Результат" id=""></textarea>
+                            <button type="submit" class="btn btn-secondary btn-sm">Сохранить <i class="fas fa-save ms-2"></i></button>
                         </form>
                     </div>
                 </div>
                 <div class="card mb-4">
                     <div class="border p-3 mb-4 rounded-4">
+                        {% for l in lab_tests  %}
                         <div class="shadow p-3 rounded-4 mb-3">
-                            <p><span class="fw-semibold text-dark">Название анализа:</span> Кровь</p>
-                            <p><span class="fw-semibold text-dark">Описание:</span> Полный анализ крови</p>
-                            <p><span class="fw-semibold text-dark">Результат:</span> Незаполнено</p>
-                            <button class="btn btn-dark btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#collapseLabTest1" aria-expanded="false" aria-controls="collapseLabTest1">Редактировать <i class="fas fa-edit ms-2"></i></button>
-                            <div class="collapse mt-3" id="collapseLabTest1">
+                            <p><span class="fw-semibold text-dark">Название анализа: </span>{{ l.test_name}}</p>
+                            <p><span class="fw-semibold text-dark">Описание:</span> {{l.description}}</p>
+                            <p><span class="fw-semibold text-dark">Результат:</span> {{l.test_result}}</p>
+                            <button class="btn btn-dark btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#collapseLabTest{{ l.id}}" aria-expanded="false" aria-controls="collapseLabTest{{ l.id}}">Редактировать <i class="fas fa-edit ms-2"></i></button>
+                            <div class="collapse mt-3" id="collapseLabTest{{ l.id}}">
                                 <div class="border p-3 rounded-4">
-                                    <form action="#" method="POST">
-                                        <input type="text" class="form-control mb-3" value="Кровь" name="test_name" placeholder="Название анализа" />
-                                        <input type="text" class="form-control mb-3" value="Полный анализ крови" name="description" placeholder="Описание" />
-                                        <button class="btn btn-secondary btn-sm">Сохранить изменения <i class="fas fa-save ms-2"></i></button>
+                                    <form action="{% url 'physician:edit_lab_test' appointment.appointment_id l.id %}" method="POST">
+                                        {% csrf_token %}
+                                        <input type="text" class="form-control mb-3" value="{{ l.test_name}}" name="test_name" placeholder="Название анализа" />
+                                        <input type="text" class="form-control mb-3" value="{{ l.description}}" name="description" placeholder="Описание" />
+                                        <textarea name="result" class="form-control mb-3" placeholder="Результат" id="">{{l.test_result}}</textarea>
+                                        <button class="btn btn-secondary btn-sm" type="submit">Сохранить изменения <i class="fas fa-save ms-2"></i></button>
                                     </form>
                                 </div>
                             </div>
                         </div>
+                        {% empty %}
                         <p>Нет лабораторных анализов</p>
+                        {% endfor %}
+                        
                     </div>
                 </div>
             </div>
