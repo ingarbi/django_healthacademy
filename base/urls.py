@@ -20,4 +20,5 @@ urlpatterns = [
         views.stripe_payment_verify,
         name="stripe_payment_verify",
     ),
+    
 ]

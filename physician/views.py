@@ -157,3 +157,41 @@ def edit_lab_test(request, appointment_id, lab_test_id):
         lab_test.save()
         messages.success(request, "Лабораторный анализ успешно обновлен")
         return redirect("physician:appointment_detail", appointment.appointment_id)
+    
+@login_required
+def add_prescription(request, appointment_id):
+    doctor = physician_models.Doctor.objects.get(user=request.user)
+    appointment = base_models.Appointment.objects.get(
+        appointment_id=appointment_id, doctor=doctor
+    )
+    if request.method == "POST":
+        medications = request.POST.get("medications")
+        base_models.Prescription.objects.create(
+            appointment=appointment, medication=medications
+        )
+    messages.success(request, "Предписание врача успешно добавлено")
+    return redirect("physician:appointment_detail", appointment.appointment_id)
+    
+
+@login_required
+def edit_prescription(request, appointment_id, prescription_id):
+    doctor = physician_models.Doctor.objects.get(user=request.user)
+    appointment = base_models.Appointment.objects.get(
+        appointment_id=appointment_id, doctor=doctor
+    )
+    prescription = base_models.Prescription.objects.get(
+        id=prescription_id, appointment=appointment
+    )
+    if request.method == "POST":
+        medications = request.POST.get("medications")
+        prescription.medication = medications
+        prescription.save()
+    messages.success(request, "Предписание врача успешно обновлено")
+    return redirect("physician:appointment_detail", appointment.appointment_id)
+
+@login_required
+def payments(request):
+    doctor = physician_models.Doctor.objects.get(user=request.user)
+    payments = base_models.Billing.objects.filter(appointment__doctor=doctor, status="Оплачено")
+    context = {"payments": payments}
+    return render(request, "physician/payments.html", context)

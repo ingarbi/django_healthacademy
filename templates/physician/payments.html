@@ -1,0 +1,45 @@
+{% extends "main/base.html" %} {% block content %}
+<section class="pt-5 pb-5">
+    <div class="container">
+      <div class="row mt-0 mt-md-4">
+        {% include "physician/sidebar.html" %}
+  
+        <div class="col-lg-9 col-md-8 col-12">
+          <h4 class="mb-0 mb-4 fw-bold">Платежи</h4>
+          <div class="card mb-4 mt-5">
+            <div class="table-responsive overflow-y-hidden">
+              <table
+                class="table mb-0 text-nowrap table-hover table-centered text-nowrap"
+              >
+                <thead class="table-light">
+                  <tr>
+                    <th>ID оплаты</th>
+                    <th>ID приема</th>
+                    <th>Пациенты</th>
+                    <th>Услуги</th>
+                    <th>Стоимость</th>
+                    <th>НДС</th>
+                    <th>Статус</th>
+                  </tr>
+                </thead>
+                <tbody>
+                 {%for p in payments%}
+                 <tr>
+                  <td>{{p.billing_id}}</td>
+                  <td>{{p.appointment.appointment_id}}</td>
+                  <td>{{p.appointment.patient.full_name}}</td>
+                  <td>{{p.appointment.service.name}}</td>
+                  <td>Р. {{p.total}}</td>
+                  <td>Р. {{p.tax}}</td>
+                  <td>{{p.status}}</td>
+                </tr>
+                 {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock content %}
