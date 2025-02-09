@@ -146,7 +146,7 @@ def edit_lab_test(request, appointment_id, lab_test_id):
         appointment_id=appointment_id, doctor=doctor
     )
     lab_test = base_models.LabTest.objects.get(id=lab_test_id, appointment=appointment)
-    
+
     if request.method == "POST":
         test_name = request.POST.get("test_name")
         description = request.POST.get("description")
@@ -157,7 +157,8 @@ def edit_lab_test(request, appointment_id, lab_test_id):
         lab_test.save()
         messages.success(request, "Лабораторный анализ успешно обновлен")
         return redirect("physician:appointment_detail", appointment.appointment_id)
-    
+
+
 @login_required
 def add_prescription(request, appointment_id):
     doctor = physician_models.Doctor.objects.get(user=request.user)
@@ -171,7 +172,7 @@ def add_prescription(request, appointment_id):
         )
     messages.success(request, "Предписание врача успешно добавлено")
     return redirect("physician:appointment_detail", appointment.appointment_id)
-    
+
 
 @login_required
 def edit_prescription(request, appointment_id, prescription_id):
@@ -189,9 +190,73 @@ def edit_prescription(request, appointment_id, prescription_id):
     messages.success(request, "Предписание врача успешно обновлено")
     return redirect("physician:appointment_detail", appointment.appointment_id)
 
+
 @login_required
 def payments(request):
     doctor = physician_models.Doctor.objects.get(user=request.user)
-    payments = base_models.Billing.objects.filter(appointment__doctor=doctor, status="Оплачено")
+    payments = base_models.Billing.objects.filter(
+        appointment__doctor=doctor, status="Оплачено"
+    )
     context = {"payments": payments}
     return render(request, "physician/payments.html", context)
+
+
+@login_required
+def notifications(request):
+    doctor = physician_models.Doctor.objects.get(user=request.user)
+    notifications = physician_models.Notification.objects.filter(
+        doctor=doctor, seen=False
+    )
+
+    context = {"notifications": notifications}
+    return render(request, "physician/notifications.html", context)
+
+
+@login_required
+def mark_as_read_notifications(request, id):
+    doctor = physician_models.Doctor.objects.get(user=request.user)
+    notification = physician_models.Notification.objects.get(id=id, doctor=doctor)
+    notification.seen = True
+    notification.save()
+    messages.success(request, "Уведомление успешно отмечено как прочитанное")
+    return redirect("physician:notifications")
+
+
+@login_required
+def profile(request):
+    doctor = physician_models.Doctor.objects.get(user=request.user)
+    formatted_next_appointment_date = doctor.next_appointment_date.strftime("%d.%m.%Y")
+
+    if request.method == "POST":
+        full_name = request.POST.get("full_name")
+        image = request.FILES.get("image")
+        phone = request.POST.get("mobile")
+        city = request.POST.get("country")
+        bio = request.POST.get("bio")
+        specialization = request.POST.get("specialization")
+        qualification = request.POST.get("qualification")
+        year_of_exp = request.POST.get("years_of_experience")
+        next_appointment_date = request.POST.get("next_available_appointment_date")
+
+        doctor.full_name = full_name
+        doctor.image = image
+        doctor.phone = phone
+        doctor.city = city
+        doctor.bio = bio
+        doctor.specialization = specialization
+        doctor.qualification = qualification
+        doctor.year_of_exp = year_of_exp
+        doctor.next_appointment_date = next_appointment_date
+
+        if image != None:
+            doctor.image = image
+
+        doctor.save()
+        messages.success(request, "Профиль успешно обновлен")
+        return redirect("physician:profile")
+
+    context = {
+        "doctor": doctor,
+        "formatted_next_appointment_date": formatted_next_appointment_date,
+    }
+    return render(request, "physician/profile.html", context)
