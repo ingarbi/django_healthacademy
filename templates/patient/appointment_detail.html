@@ -1,0 +1,174 @@
+{% extends "main/base.html" %} {% block content %}
+<section class="pt-5 pb-5">
+  <div class="container">
+    <div class="row mt-0 mt-md-4">
+      {% include "patient/sidebar.html" %}
+      <div class="col-lg-9 col-md-8 col-12">
+        <h4 class="mb-0 mb-4 fw-bold">
+          Детали приема #{{ appointment.appointment_id }}
+        </h4>
+        <div class="card mb-4">
+          <div class="shadow border p-3 mb-4 rounded-4">
+            <p>
+              <a>
+                <p>
+                  <span class="fw-semibold text-dark">ID приема:</span> 
+                  {{appointment.appointment_id }}
+                </p>
+                <p>
+                  <span class="fw-semibold text-dark">Услуга:</span> 
+                  {{appointment.service.name }}
+                </p>
+                <p>
+                  <span class="fw-semibold text-dark">Врач:</span>
+                  {{appointment.doctor.full_name}}
+                </p>
+                <p>
+                  <span class="fw-semibold text-dark">Проблема:</span>
+                  {{appointment.issues}}
+                </p>
+                <p>
+                  <span class="fw-semibold text-dark">Симптомы:</span>
+                  {{appointment.symptoms}}
+                </p>
+                <p>
+                  <span class="fw-semibold text-dark">Статус:</span>
+                  {{appointment.status}}
+                </p>
+                <p>
+                  <span class="fw-semibold text-dark">Дата:</span>
+                  {{appointment.appointment_date}}
+                </p>
+                <p>
+                  <span class="fw-semibold text-dark">Действие:</span>
+                  {% if appointment.status == "Запланировано" %}
+                  <a
+                    href="{% url 'patient:cancel_appointment' appointment.appointment_id %}"
+                    class="btn btn-outline-danger btn-sm"
+                    >Отменить прием <i class="fas fa-trash ms-2"></i
+                  ></a>
+                  <a
+                    href="{% url 'patient:complete_appointment' appointment.appointment_id %}"
+                    class="btn btn-outline-success btn-sm"
+                    >Завершить прием <i class="fas fa-check-circle ms-2"></i
+                  ></a>
+                  {% elif appointment.status == "Отменено" %}
+                  <a
+                    href="{% url 'patient:activate_appointment' appointment.appointment_id %}"
+                    class="btn btn-success btn-sm"
+                    >Активировать прием <i class="fas fa-check-circle ms-2"></i
+                  ></a>
+                  {% elif appointment.status == "Отменено" %}
+                  <a href="#" class="btn btn-success btn-sm"
+                    >Прием выполнен <i class="fas fa-check-circle ms-2"></i
+                  ></a>
+                  {% endif %}
+                </p>
+              </a>
+            </p>
+          </div>
+        </div>
+
+        <div id="medical-report">
+          <div class="d-flex justify-content-between">
+            <h4 class="mb-0 mb-4 fw-bold">Медицинские отчеты</h4>
+          </div>
+          <div class="collapse" id="collapseMedicalReport">
+          
+          </div>
+
+          <div class="card mb-4">
+            <div class="border p-3 mb-4 rounded-4">
+              {% for record in medical_record %}
+
+              <div class="shadow p-3 rounded-4 mb-3">
+                <p>
+                  <span class="fw-semibold text-dark">Диагноз: </span>{{record.diagnosis}}
+                </p>
+                <p>
+                  <span class="fw-semibold text-dark">Лечение: </span>
+                  {{record.treatment}}
+                </p>
+                
+                <div
+                  class="collapse mt-3"
+                  id="collapseMedicalRecord{{ record.id}}"
+                >
+                
+                </div>
+              </div>
+              {% empty %}
+              <p>Нет медицинских отчетов</p>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+
+        <div id="lab-test">
+          <div class="d-flex justify-content-between">
+            <h4 class="mb-0 mb-4 fw-bold">Лабораторные анализы</h4>
+        
+          </div>
+          <div class="collapse" id="collapseLabTest">
+        
+          </div>
+          <div class="card mb-4">
+            <div class="border p-3 mb-4 rounded-4">
+              {% for l in lab_tests %}
+              <div class="shadow p-3 rounded-4 mb-3">
+                <p>
+                  <span class="fw-semibold text-dark">Название анализа: </span
+                  >{{ l.test_name}}
+                </p>
+                <p>
+                  <span class="fw-semibold text-dark">Описание:</span>
+                  {{l.description}}
+                </p>
+                <p>
+                  <span class="fw-semibold text-dark">Результат:</span>
+                  {{l.test_result}}
+                </p>
+                
+                <div class="collapse mt-3" id="collapseLabTest{{ l.id}}">
+                 
+                </div>
+              </div>
+              {% empty %}
+              <p>Нет лабораторных анализов</p>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+
+        <div id="prescription">
+          <div class="d-flex justify-content-between">
+            <h4 class="mb-0 mb-4 fw-bold">Предписание врача</h4>
+            
+          </div>
+          <div class="collapse" id="collapsePrescription">
+            
+          </div>
+          <div class="card mb-4">
+            <div class="border p-3 mb-4 rounded-4">
+              {% for p in prescriptions %}
+              <div class="shadow p-3 rounded-4 mb-3">
+                <p>
+                  <span class="fw-semibold text-dark">Лекарства:</span> {{p.medication}}
+                </p>
+                
+                <div class="collapse mt-3" id="collapsePrescription1">
+                  
+                </div>
+              </div>
+              {% empty %}
+              <p>Нет рецептов</p>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock content %}
