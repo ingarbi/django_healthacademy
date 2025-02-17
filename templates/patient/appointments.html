@@ -14,7 +14,7 @@
                     <a href="{% url 'patient:appointment_detail' a.appointment_id %}">
                         <p><span class="fw-semibold text-dark">ID приема:</span> {{ a.appointment_id }}</p>
                         <p><span class="fw-semibold text-dark">Услуга:</span> {{ a.service.name }}</p>
-                        <p><span class="fw-semibold text-dark">Пациент:</span> {{a.patient.full_name}}</p>
+                        <p><span class="fw-semibold text-dark">Врач:</span> {{a.doctor.full_name}}</p>
                         <p><span class="fw-semibold text-dark">Проблема:</span> {{a.issues}}</p>
                         <p><span class="fw-semibold text-dark">Симптомы:</span> {{a.symptoms}}</p>
                         <p><span class="fw-semibold text-dark">Статус:</span> {{a.status}}</p>

@@ -27,4 +27,8 @@ urlpatterns = [
         views.complete_appointment,
         name="complete_appointment",
     ),
+    path("payments/", views.payments, name="payments"),
+    path("notifications/", views.notifications, name="notifications"),
+    path("mark-as-read-notifications/<id>/", views.mark_as_read_notifications, name="mark_as_read_notifications"),
+    path("profile/", views.profile, name="profile"),
 ]
